@@ -1,0 +1,36 @@
+use chat;
+
+drop function if exists gxupdate;
+create function gxupdate returns INTEGER soname "udfgx.so";
+
+drop trigger if exists insert_redis;
+#drop trigger if exists update_redis;
+#drop trigger if exists delete_redis;
+
+delimiter |
+
+create trigger insert_redis
+    after insert on usr
+    for each row
+    begin
+       declare ret int;
+       select gxupdate(NEW.name,NEW.password) into @ret;
+end|
+
+#create trigger update_redis
+#    after update on test1
+#    for each row
+#    begin
+#        declare ret int;
+#        select gxupdate(1, NEW.id, NEW.name, NEW.age, NEW.description) into @ret;
+#   end|
+
+#create trigger delete_redis
+#    after delete on test1
+#    for each row
+#    begin
+#        declare ret int;
+#        select gxupdate(0, OLD.id, OLD.name, OLD.age, OLD.description) into @ret;
+#   end|
+
+delimiter ;
