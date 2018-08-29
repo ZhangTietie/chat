@@ -1,1 +1,2 @@
-this is project chat_server
+/*this is project chat_server*/
+
